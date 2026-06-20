@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { X, Trash2, Plus } from 'lucide-react';
+import { useState } from 'react';
+import { X, Trash2 } from 'lucide-react';
 import DropZone from '../upload/DropZone';
 import { createGroup } from '../../db/queries';
 
@@ -17,8 +17,7 @@ export default function GroupCreateModal({ isOpen, onClose, onGroupCreated }) {
     
     // Default labels
     const updatedLabels = [...labels];
-    selectedFiles.forEach((file, index) => {
-      const idx = labels.length + index;
+    selectedFiles.forEach((file) => {
       // Try to extract logical names from file name, or default
       const cleanName = file.name.split('.')[0].replace(/[-_]/g, ' ');
       updatedLabels.push(cleanName.substring(0, 20));

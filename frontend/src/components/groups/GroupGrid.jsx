@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Search, Plus } from 'lucide-react';
 import GroupCard from './GroupCard';
 

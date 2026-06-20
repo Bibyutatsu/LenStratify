@@ -68,7 +68,9 @@ async def auto_group(files: List[UploadFile] = File(...)):
     images_data = []
 
     for file in files:
-        if not file.content_type.startswith("image/"):
+        is_image_type = file.content_type and file.content_type.startswith("image/")
+        is_image_ext = file.filename and file.filename.lower().endswith((".jpg", ".jpeg", ".png", ".webp", ".gif"))
+        if not is_image_type and not is_image_ext:
             continue
         try:
             content = await file.read()

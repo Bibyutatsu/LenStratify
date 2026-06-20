@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { Settings, Download, Trash2, Layers } from 'lucide-react';
 import { db } from '../../db/db';
@@ -29,6 +29,7 @@ export default function GroupCard({
       const coverImage = images[0];
       if (coverImage && coverImage.thumbnail) {
         const url = URL.createObjectURL(coverImage.thumbnail);
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setCoverUrl(url);
         return () => URL.revokeObjectURL(url);
       }
@@ -51,7 +52,7 @@ export default function GroupCard({
     onDeleteGroup(group.id);
   };
 
-  const handleCardClick = (e) => {
+  const handleCardClick = () => {
     if (isSelectionMode) {
       onToggleSelect(group.id);
     } else {
@@ -139,7 +140,7 @@ export default function GroupCard({
         {/* Version list indicator */}
         {images && images.length > 0 && (
           <div className="flex items-center gap-1 mt-3.5 overflow-x-auto pb-1 max-w-full">
-            {images.slice(0, 5).map((img, i) => {
+            {images.slice(0, 5).map((img) => {
               const url = img.thumbnail ? URL.createObjectURL(img.thumbnail) : '';
               return (
                 <div key={img.id} className="relative w-6 h-6 rounded-md overflow-hidden bg-zinc-900 border border-zinc-850 flex-shrink-0" title={img.label}>

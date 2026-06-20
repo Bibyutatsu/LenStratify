@@ -48,9 +48,7 @@ export default function CompareViewer({ groupId, onClose }) {
       // Latest version is A, second latest or first is B
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setIndexA(images.length - 1);
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIndexB(Math.max(0, images.length - 2));
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setActiveIndex(images.length - 1);
     }
   }, [images]);
@@ -144,7 +142,7 @@ export default function CompareViewer({ groupId, onClose }) {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [images, mode, isFullscreen]);
+  }, [images, mode, isFullscreen, onClose]);
 
   // Fullscreen management listener
   useEffect(() => {

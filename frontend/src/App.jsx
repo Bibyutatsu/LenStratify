@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Home from './pages/Home';
 import CompareViewer from './components/viewer/CompareViewer';
 import AutoGroupModal from './components/autogroup/AutoGroupModal';

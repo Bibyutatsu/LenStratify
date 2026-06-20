@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { X, Sparkles, Loader2, ArrowRight, Check, AlertCircle, Plus, Trash2 } from 'lucide-react';
 import DropZone from '../upload/DropZone';
 import { createGroup } from '../../db/queries';
