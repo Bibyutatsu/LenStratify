@@ -10,11 +10,11 @@ def check_similarity(img_a_bytes: bytes, img_b_bytes: bytes, phash_a: str, phash
             hash_b = imagehash.hex_to_hash(phash_b)
             hamming_dist = hash_a - hash_b
             
-            # If extremely close, group immediately (saves CV processing)
-            if hamming_dist <= 7:
+            # If extremely close, group immediately
+            if hamming_dist <= 5:
                 return True
-            # If extremely far, reject immediately
-            if hamming_dist > 24:
+            # If far, reject immediately
+            if hamming_dist > 18:
                 return False
         except Exception as e:
             print(f"Error parsing hex hash: {e}")
@@ -29,23 +29,20 @@ def check_similarity(img_a_bytes: bytes, img_b_bytes: bytes, phash_a: str, phash
     # Stage 2: Structural Similarity (Grayscale, fully color-invariant)
     ssim = compute_ssim(cv_a, cv_b)
     
-    # If structural similarity is high, it is a version of the same image with color/lighting edits
-    if ssim >= 0.76:
+    # If structural similarity is high, it is a version of the same image
+    if ssim >= 0.74:
         return True
 
     # Stage 3: ORB keypoints matching (Grayscale, handles scale, crop, and color edits)
     matches_count = compute_orb_matches(cv_a, cv_b)
-    if matches_count >= 25:
+    if matches_count >= 100:
         return True
 
-    # Tie-breaker using composite score (including color histogram, but heavily discounted)
-    hist_corr = compute_hist_correlation(cv_a, cv_b)
+    # Tie-breaker using composite score based purely on structure (SSIM) and grayscale phash
     norm_phash = max(0, 1 - (hamming_dist / 64.0))
-    
-    # Composite score with higher weight to structure (SSIM) and lower to color (hist_corr)
-    score = 0.6 * ssim + 0.15 * hist_corr + 0.25 * norm_phash
+    score = 0.75 * ssim + 0.25 * norm_phash
 
-    if score >= 0.65:
+    if score >= 0.70:
         return True
 
     return False
