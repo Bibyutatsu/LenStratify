@@ -204,13 +204,16 @@ export default function AutoGroupModal({ isOpen, onClose, onGroupsSaved }) {
                     {files.map((file, idx) => {
                       const url = URL.createObjectURL(file);
                       return (
-                        <div key={idx} className="relative aspect-video rounded-lg overflow-hidden border border-zinc-850 bg-zinc-950 flex items-center justify-center group/item">
+                        <div key={idx} className="relative aspect-video rounded-lg overflow-hidden border border-zinc-850 bg-zinc-950 flex items-center justify-center group/item" title={file.name}>
                           <img src={url} alt="" className="w-full h-full object-cover" />
-                          <div className="absolute inset-0 bg-black/60 opacity-0 group-hover/item:opacity-100 transition-opacity flex items-center justify-center p-2">
+                          <div className="absolute inset-0 bg-black/60 opacity-0 group-hover/item:opacity-100 transition-opacity flex flex-col justify-between p-2">
+                            <span className="text-[10px] text-zinc-200 bg-zinc-950/85 px-1.5 py-0.5 rounded truncate max-w-full block font-mono">
+                              {file.name}
+                            </span>
                             <button
                               type="button"
                               onClick={() => handleRemoveFile(idx)}
-                              className="p-1.5 bg-red-900 text-white rounded-md hover:bg-red-800 transition-colors"
+                              className="p-1.5 bg-red-900 text-white rounded-md hover:bg-red-800 transition-colors self-end"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
                             </button>
@@ -279,7 +282,7 @@ export default function AutoGroupModal({ isOpen, onClose, onGroupsSaved }) {
                       {group.images.map(img => {
                         const previewUrl = getFilePreviewUrl(img.filename);
                         return (
-                          <div key={img.filename} className="relative w-20 h-16 rounded-lg overflow-hidden border border-zinc-850 bg-zinc-900 group/img flex-shrink-0">
+                          <div key={img.filename} className="relative w-20 h-16 rounded-lg overflow-hidden border border-zinc-850 bg-zinc-900 group/img flex-shrink-0" title={img.filename}>
                             {previewUrl && <img src={previewUrl} alt="" className="w-full h-full object-cover" />}
                             <div className="absolute inset-0 bg-black/75 opacity-0 group-hover/item:opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
                               <button

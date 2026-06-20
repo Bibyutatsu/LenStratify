@@ -42,7 +42,7 @@ export default function Home({ onOpenViewer, onOpenAutoGroup }) {
         setStorageUsage({ used, total, percent });
       });
     }
-  }, [groups]);
+  }, [groups.length]);
 
   const handleImportZip = async (e) => {
     const file = e.target.files?.[0];

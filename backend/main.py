@@ -3,52 +3,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from typing import List
 import uvicorn
 import os
-import base64
 
 from similarity import compute_phash
 from grouping import run_grouping
 
 app = FastAPI(title="LenStratify OpenCV Backend")
-
-@app.get("/api/seed-groups")
-async def seed_groups():
-    groups_file_path = "/Users/oindrila/Projects/LenStratify/groups.txt"
-    if not os.path.exists(groups_file_path):
-        groups_file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "groups.txt")
-    
-    if not os.path.exists(groups_file_path):
-        raise HTTPException(status_code=404, detail="groups.txt not found")
-        
-    with open(groups_file_path, "r") as f:
-        content = f.read()
-        
-    lines = [line.strip() for line in content.split("\n")]
-    
-    groups = []
-    current_group = None
-    
-    base_dir = os.path.dirname(os.path.abspath(groups_file_path))
-    
-    for line in lines:
-        if not line:
-            continue
-        if line.startswith("Group"):
-            current_group = {"name": line, "images": []}
-            groups.append(current_group)
-        else:
-            if current_group is not None:
-                # It's an image path
-                img_path = os.path.normpath(os.path.join(base_dir, line))
-                if os.path.exists(img_path):
-                    with open(img_path, "rb") as img_file:
-                        encoded = base64.b64encode(img_file.read()).decode("utf-8")
-                    filename = os.path.basename(img_path)
-                    current_group["images"].append({
-                        "filename": filename,
-                        "content_b64": encoded,
-                        "mime": "image/jpeg" if filename.lower().endswith((".jpg", ".jpeg")) else "image/png"
-                    })
-    return {"groups": groups}
 
 
 # Enable CORS for the frontend

@@ -27,21 +27,25 @@ export default function DropZone({ onFilesSelected, accept = 'image/*', multiple
         });
       } else if (item.isDirectory) {
         const dirReader = item.createReader();
-        const readEntries = () => {
+        let allEntries = [];
+        
+        const readAllEntries = () => {
           dirReader.readEntries(async (entries) => {
             if (entries.length === 0) {
-              resolve([]);
-              return;
+              const filePromises = allEntries.map(entry => traverseFileTree(entry, path + item.name + '/'));
+              const results = await Promise.all(filePromises);
+              resolve(results.flat());
+            } else {
+              allEntries = allEntries.concat(entries);
+              readAllEntries();
             }
-            const filePromises = [];
-            for (const entry of entries) {
-              filePromises.push(traverseFileTree(entry, path + item.name + '/'));
-            }
-            const results = await Promise.all(filePromises);
-            resolve(results.flat());
+          }, (error) => {
+            console.error(error);
+            resolve([]);
           });
         };
-        readEntries();
+        
+        readAllEntries();
       } else {
         resolve([]);
       }
